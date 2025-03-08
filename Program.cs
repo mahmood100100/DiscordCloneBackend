@@ -25,7 +25,9 @@ namespace DiscordCloneBackend
     {
         public static async Task Main(string[] args)
         {
+            // Load environment variables from .env file
             DotEnv.Load();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Load secret key and ensure it's not missing
@@ -35,9 +37,20 @@ namespace DiscordCloneBackend
                 throw new ArgumentNullException("JWT Secret Key is missing in configuration.");
             }
 
-            // Add DbContext
+            // Get the raw connection string from configuration
+            var awsConnectionString = builder.Configuration.GetConnectionString("AWSConnection");
+
+            // Substitute environment variables into the connection string
+            awsConnectionString = awsConnectionString
+                .Replace("env:AWS_DB_USERNAME", Environment.GetEnvironmentVariable("AWS_DB_USERNAME"))
+                .Replace("env:AWS_DB_PASSWORD", Environment.GetEnvironmentVariable("AWS_DB_PASSWORD"));
+
+            // Debug: Print the resolved connection string to verify
+            Console.WriteLine($"Resolved AWS Connection String: {awsConnectionString}");
+
+            // Add DbContext with the resolved connection string
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(awsConnectionString));
 
             // Register repositories
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -67,7 +80,7 @@ namespace DiscordCloneBackend
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IFileService, FileService>();
 
-            //Hub Notification services
+            // Hub Notification services
             builder.Services.AddScoped<IMemberNotificationService, MemberNotificationService>();
             builder.Services.AddScoped<IChannelNotificationService, ChannelNotificationService>();
             builder.Services.AddScoped<IServerNotificationService, ServerNotificationService>();
@@ -156,7 +169,7 @@ namespace DiscordCloneBackend
 
             // Configure CORS
             var origin = builder.Configuration["CorsSettings:FrontendUrl"];
-            Console.WriteLine(origin);
+            Console.WriteLine($"CORS Origin: {origin}");
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowFrontend", policy =>
@@ -168,7 +181,7 @@ namespace DiscordCloneBackend
                 });
             });
 
-            //SignalR configuring
+            // SignalR configuring
             builder.Services.AddSignalR();
 
             var app = builder.Build();
@@ -207,7 +220,7 @@ namespace DiscordCloneBackend
             // Map Controllers
             app.MapControllers();
 
-            // Map SignalR Hub
+            // Map SignalR Hubs
             app.MapHub<MemberHub>("/memberHub");
             app.MapHub<ChannelHub>("/channelHub");
             app.MapHub<ServerHub>("/serverHub");
