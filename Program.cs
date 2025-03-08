@@ -45,9 +45,6 @@ namespace DiscordCloneBackend
                 .Replace("env:AWS_DB_USERNAME", Environment.GetEnvironmentVariable("AWS_DB_USERNAME"))
                 .Replace("env:AWS_DB_PASSWORD", Environment.GetEnvironmentVariable("AWS_DB_PASSWORD"));
 
-            // Debug: Print the resolved connection string to verify
-            Console.WriteLine($"Resolved AWS Connection String: {awsConnectionString}");
-
             // Add DbContext with the resolved connection string
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(awsConnectionString));
