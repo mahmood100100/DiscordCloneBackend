@@ -1,0 +1,30 @@
+﻿# Ignore Visual Studio temporary files, directories, and files
+.vs/
+.vs2019/
+.vs2022/
+.idea/
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]evelopment/
+[Dd]eployment/
+[Dd]ebugTest/
+[Dd]ebugTestPublic/
+[Dd]ebugNonWindows/
+bin/
+obj/
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+# .env file for sensitive information
+.env
+# Ignore appsettings files with sensitive data
+appsettings.Development.json
+appsettings.Production.json
