@@ -28,3 +28,7 @@ obj/
 # Ignore appsettings files with sensitive data
 appsettings.Development.json
 appsettings.Production.json
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

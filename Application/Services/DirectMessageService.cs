@@ -54,6 +54,7 @@ namespace DiscordCloneBackend.Application.Services
             }
 
             var directMessage = mapper.Map<DirectMessage>(messageDto);
+            directMessage.FileUrl = fileUrl;
 
             await unitOfWork.DirectMessages.AddAsync(directMessage);
             await unitOfWork.CompleteAsync();
