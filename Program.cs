@@ -39,7 +39,6 @@ namespace DiscordCloneBackend
 
             // load the connection string from .env
             var defaultConnectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
-            Console.WriteLine("POSTGRES_CONNECTION_STRING: " + Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING"));
             if (string.IsNullOrEmpty(defaultConnectionString))
             {
                 throw new ArgumentNullException("POSTGRES_CONNECTION_STRING is missing in environment variables.");
