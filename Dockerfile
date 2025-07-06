@@ -10,7 +10,7 @@ WORKDIR /src
 
 # Copy solution and project files
 COPY *.sln ./
-COPY DiscordCloneBackend/*.csproj ./DiscordCloneBackend/
+COPY *.csproj ./
 
 # Restore dependencies
 RUN dotnet restore
@@ -19,7 +19,7 @@ RUN dotnet restore
 COPY . .
 
 # Publish
-RUN dotnet publish DiscordCloneBackend/DiscordCloneBackend.csproj -c Release -o /app/publish
+RUN dotnet publish DiscordCloneBackend.csproj -c Release -o /app/publish
 
 # Final runtime image
 FROM base AS final
