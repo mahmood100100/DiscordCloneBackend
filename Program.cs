@@ -37,19 +37,16 @@ namespace DiscordCloneBackend
                 throw new ArgumentNullException("JWT Secret Key is missing in configuration.");
             }
 
-            // Get the raw connection string from configuration
-            //var awsConnectionString = builder.Configuration.GetConnectionString("AWSConnection");
-
-            // Substitute environment variables into the connection string
-            /*awsConnectionString = awsConnectionString
-                .Replace("env:AWS_DB_USERNAME", Environment.GetEnvironmentVariable("AWS_DB_USERNAME"))
-                .Replace("env:AWS_DB_PASSWORD", Environment.GetEnvironmentVariable("AWS_DB_PASSWORD"));
-            */
-            // Add DbContext with the resolved connection string
-            var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            // load the connection string from .env
+            var defaultConnectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
+            Console.WriteLine("POSTGRES_CONNECTION_STRING: " + Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING"));
+            if (string.IsNullOrEmpty(defaultConnectionString))
+            {
+                throw new ArgumentNullException("POSTGRES_CONNECTION_STRING is missing in environment variables.");
+            }
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(defaultConnectionString));
+                options.UseNpgsql(defaultConnectionString));
 
             // Register repositories
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
