@@ -38,16 +38,18 @@ namespace DiscordCloneBackend
             }
 
             // Get the raw connection string from configuration
-            var awsConnectionString = builder.Configuration.GetConnectionString("AWSConnection");
+            //var awsConnectionString = builder.Configuration.GetConnectionString("AWSConnection");
 
             // Substitute environment variables into the connection string
-            awsConnectionString = awsConnectionString
+            /*awsConnectionString = awsConnectionString
                 .Replace("env:AWS_DB_USERNAME", Environment.GetEnvironmentVariable("AWS_DB_USERNAME"))
                 .Replace("env:AWS_DB_PASSWORD", Environment.GetEnvironmentVariable("AWS_DB_PASSWORD"));
-
+            */
             // Add DbContext with the resolved connection string
+            var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(awsConnectionString));
+                options.UseSqlServer(defaultConnectionString));
 
             // Register repositories
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -119,7 +121,7 @@ namespace DiscordCloneBackend
             // Configure JWT Authentication with detailed logging
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
-                {
+                {      
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters

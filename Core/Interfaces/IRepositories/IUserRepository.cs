@@ -1,5 +1,4 @@
-﻿using DiscordCloneBackend.Application.DTOs;
-using DiscordCloneBackend.Core.Entities;
+﻿using DiscordCloneBackend.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace DiscordCloneBackend.Core.Interfaces.IRepositories
