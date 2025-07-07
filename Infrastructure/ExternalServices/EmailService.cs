@@ -77,6 +77,7 @@ namespace DiscordCloneBackend.Infrastructure.ExternalServices
 
                 Console.WriteLine("[DEBUG] Sending email...");
                 await client.SendAsync(emailMessage);
+                Console.WriteLine($"[DEBUG] Email send command finished at {DateTime.UtcNow:O}");
                 Console.WriteLine("[DEBUG] Email sent successfully.");
 
                 await client.DisconnectAsync(true);

@@ -399,7 +399,7 @@ namespace DiscordCloneBackend.Application.Services
                 return new ApiResponse(400, "Failed to generate email verification token.");
             }
 
-            var cooldownMinutes = 1440;
+            var cooldownMinutes = 0.0833;
             if (user.LastVerificationEmailSent.HasValue)
             {
                 var lastSent = user.LastVerificationEmailSent.Value;
